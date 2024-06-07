@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Job</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js">
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe); /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .text {
+            font-family: Arial, sans-serif;
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 20px 0; 
+        }
+        .table-container {
+            margin-top: 70px;
+            width: 1200px; 
+            height: 420px; 
+            overflow: auto; 
+            border: 1px solid #ccc; 
+            background-color: black; 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: black; 
+            color: white; 
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+            color: white; 
+            background-color: black; 
+            resize: none; 
+            overflow: hidden; 
+            white-space: normal;
+        }
+        .dataTables_info {
+            color: white !important; 
+        }
+    </style>
+</head>
+<div>
+    <div class="text">Find your dream job</div>
+    <div class="table-container">
+        <table id="example" class="display">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Job title</th>
+                    <th>Company name</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+            {% set my_variable = 1 %}
+            <tbody id="table-body">
+                {% for item in exel %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item[0] }}</td>
+                    <td>{{ item[1] }}</td>
+                    <td>{{ item[2] }}</td>
+                    <td>{{ item[3] }}</td>
+                    <td><a target="_blank" style="color: white;" href={{ item[4] }}>Link</a></td>
+                </tr>
+                {% set my_variable = my_variable|int + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="/download-file/{{name}}" download><img  src="/static/excel.png" alt="Download Excel-file" style="width: 50px; margin-top: 20px;"></a>
+</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Инициализация DataTable
+            var table = $('#example').DataTable({
+                paging: false,
+                searching: false,
+                responsive: true, 
+                ordering: false 
+            });
+        });
+    </script>
+</body>
+</html>

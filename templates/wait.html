@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting page</title>
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe); 
+            display: flex;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .text {
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000;
+            margin-bottom: 20px; 
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px; 
+        }
+    </style>
+    <script type="text/javascript">
+        async function checkStatus() {
+            const response = await fetch('/check-status/{{ name }}');
+            const data = await response.json();
+            if (data.status === 'completed') {
+                window.location.href = '/results/{{name}}';
+            }
+        }
+
+        setInterval(checkStatus, 3000);
+
+        window.onload = checkStatus;
+    </script>
+</head>
+<body>
+    <div class="text">Find your dream job</div>
+    <div class="center">
+        <img src="/static/ZZ5H.gif" alt="Loading..." style="width: 120px;">
+    </div>
+    <div>Your dream job is just a step away!</div>
+</body>
+</html>

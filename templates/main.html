@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Dream Job</title>
+    <style>
+        body, html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe); /* Gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .text {
+            font-family: Arial, sans-serif;
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 20px 0; 
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 10px auto 0; /* Updated margin-top */
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+    </style>
+</head>
+<body>
+    <div class="text">Find your dream job</div>
+    <div class="container mt-5">
+        <div class="form-container">
+            <form method="post" action="/submit-job" id="job-form" novalidate>
+                <div class="form-group">
+                    <label for="job-title">Job Title</label>
+                    <input type="text" class="form-control" id="job-title" name="job_title" required placeholder="Enter the job title">
+                    <div class="invalid-feedback">Please enter a job title.</div>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" required placeholder="Enter the location">
+                    <div class="invalid-feedback">Please enter a location.</div>
+                </div>
+                <div class="form-group">
+                    <label for="time">Maximum number of days ago a vacancy was posted:</label>
+                    <input type="number" class="form-control" id="time" name="time" min="1" max="31" required placeholder="Enter a number from 1 to 31">
+                    <div class="invalid-feedback" id="time-error">Please enter a value from 1 to 31.</div>
+                </div>
+                <div class="form-group">
+                    <label for="count">How many jobs do you want to get:</label>
+                    <select class="form-control" id="count" name="count">
+                        <option value="25">30</option>
+                        <option value="50">60</option>
+                        <option value="75">90</option>
+                        <option value="100">120</option>
+                        <option value="125">150</option>
+                        <option value="150">180</option>
+                        <option value="175">210</option>
+                        <option value="225">225</option>
+                    </select>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Find jobs</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var form = document.getElementById('job-form');
+            var timeInput = document.getElementById('time');
+            var timeError = document.getElementById('time-error');
+            var jobTitleInput = document.getElementById('job-title');
+            var locationInput = document.getElementById('location');
+
+            form.addEventListener('submit', function(event) {
+                var isValid = true;
+
+                if (!jobTitleInput.value) {
+                    jobTitleInput.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    jobTitleInput.classList.remove('is-invalid');
+                }
+
+                if (!locationInput.value) {
+                    locationInput.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    locationInput.classList.remove('is-invalid');
+                }
+
+                if (!timeInput.value || timeInput.value < 1 || timeInput.value > 31) {
+                    timeInput.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    timeInput.classList.remove('is-invalid');
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                
+                if (isValid) {
+                    jobTitleInput.classList.add('was-validated');
+                    locationInput.classList.add('was-validated');
+                    timeInput.classList.add('was-validated');
+                }
+            });
+
+            
+            timeInput.addEventListener('input', function() {
+                if (timeInput.validity.rangeUnderflow) {
+                    timeInput.setCustomValidity('Please enter a value greater than or equal to 1.');
+                    timeError.textContent = 'Please enter a value greater than or equal to 1.';
+                } else if (timeInput.validity.rangeOverflow) {
+                    timeInput.setCustomValidity('Please enter a value less than or equal to 31.');
+                    timeError.textContent = 'Please enter a value less than or equal to 31.';
+                } else {
+                    timeInput.setCustomValidity('');
+                    timeError.textContent = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
