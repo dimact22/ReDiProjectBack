@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 import time
 
 
-def linkedin_info(job_title, location, e_name, t, count):
+def linkedin_info(job_title, location, e_name, t, count, driver):
     try:
         count = int(count)  # Ensure 'count' is an integer
     except Exception as e:
@@ -28,15 +28,6 @@ def linkedin_info(job_title, location, e_name, t, count):
                 break
             last_height = new_height
 
-    options = Options()
-    options.add_argument("--lang=en")  # Set browser language to English
-    options.add_argument("--window-size=1920,1080")  # Set browser window size
-    options.add_argument("--headless")  # Run browser in headless mode (no GUI)
-    options.add_argument(
-        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    )  # Set user agent to mimic a real browser
-    driver = webdriver.Chrome(options=options)
-
     try:
         t = int(t) * 86400  # Convert 't' to seconds for the LinkedIn filter
         driver.get(
@@ -44,7 +35,6 @@ def linkedin_info(job_title, location, e_name, t, count):
         )  # Open the LinkedIn job search page
     except WebDriverException as e:
         print(f"Error loading LinkedIn page: {e}")
-        driver.quit()
         return
 
     try:
@@ -52,7 +42,6 @@ def linkedin_info(job_title, location, e_name, t, count):
         sheet = wb.active  # Select the active sheet
     except Exception as e:
         print(f"Error loading Excel workbook: {e}")
-        driver.quit()
         return
 
     try:
@@ -60,7 +49,6 @@ def linkedin_info(job_title, location, e_name, t, count):
         scroll_to_bottom(driver)
     except WebDriverException as e:
         print(f"Error scrolling the page: {e}")
-        driver.quit()
         return
 
     c = 0
@@ -71,13 +59,11 @@ def linkedin_info(job_title, location, e_name, t, count):
             By.CSS_SELECTOR, "li")  # Get all job postings
     except NoSuchElementException as e:
         print(f"Error finding job results: {e}")
-        driver.quit()
         return
 
     for job_elem in job_elements:  # Iterate through each job posting
         info = []
         if c == count // 3:  # Stop if the count limit is reached
-            driver.quit()
             return
         try:
             job = job_elem.find_element(
@@ -101,5 +87,3 @@ def linkedin_info(job_title, location, e_name, t, count):
         except Exception as e:
             print(f"Error saving Excel workbook: {e}")
             continue
-
-    driver.quit()  # Quit the browser

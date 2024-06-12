@@ -36,32 +36,48 @@ class Jobs:
         wb.save(self.name)  # Save the workbook with the specified name
 
     # Method to search for jobs on Indeed and save to Excel
-    def found_indeed(self):
+    def found_indeed(self, driver):
         try:
             indeed_info(self.job_title, self.loc,
-                        self.name, self.time, self.count)
+                        self.name, self.time, self.count, driver)
         except Exception as e:
             print(f"Error in Indeed: {e}")
 
     # Method to search for jobs on Stepstone and save to Excel
-    def found_stepstone(self):
+    def found_stepstone(self, driver):
         try:
             stepstone_info(self.job_title, self.loc,
-                           self.name, self.time, self.count)
+                           self.name, self.time, self.count, driver)
         except Exception as e:
             print(f"Error in Stepstone: {e}")
 
     # Method to search for jobs on LinkedIn and save to Excel
-    def found_linkedin(self):
+    def found_linkedin(self, driver):
         try:
             linkedin_info(self.job_title, self.loc,
-                          self.name, self.time, self.count)
+                          self.name, self.time, self.count, driver)
         except Exception as e:
             print(f"Error in LinkedIn: {e}")
 
     # Method to search for jobs on all platforms and save to Excel
     def found_all_works(self):
         self.create_exel()  # Create a new Excel file
-        self.found_indeed()  # Search for jobs on Indeed
-        self.found_stepstone()  # Search for jobs on Stepstone
-        self.found_linkedin()  # Search for jobs on LinkedIn
+        try:
+            options = Options()
+            # Set browser language to English
+            options.add_argument("--lang=en")
+            # Set browser window size
+            options.add_argument("--window-size=1920,1080")
+            # Run browser in headless mode (no GUI)
+            options.add_argument("--headless")
+            options.add_argument(
+                "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            )  # Set user agent to mimic a real browser
+            driver = webdriver.Chrome(options=options)
+        except:
+            print("Some error")
+            return 0
+        self.found_indeed(driver)  # Search for jobs on Indeed
+        self.found_stepstone(driver)  # Search for jobs on Stepstone
+        self.found_linkedin(driver)  # Search for jobs on LinkedIn
+        driver.quit()  # Quit the browser

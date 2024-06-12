@@ -6,21 +6,12 @@ from selenium.webdriver.chrome.options import Options
 import time
 
 
-def stepstone_info(job_title, location, e_name, t, count):
+def stepstone_info(job_title, location, e_name, t, count, driver):
     try:
         count = int(count)  # Ensure 'count' is an integer
     except Exception as e:
         print(e)
         return
-
-    options = Options()
-    options.add_argument("--lang=en")  # Set browser language to English
-    options.add_argument("--window-size=1920,1080")  # Set browser window size
-    options.add_argument("--headless")  # Run browser in headless mode (no GUI)
-    options.add_argument(
-        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    )  # Set user agent to mimic a real browser
-    driver = webdriver.Chrome(options=options)
 
     try:
         wb = load_workbook(e_name)  # Load the Excel workbook
@@ -58,7 +49,6 @@ def stepstone_info(job_title, location, e_name, t, count):
         for job in vac1:  # Iterate through each job posting
             info = []
             if c == count // 3:  # Stop if the count limit is reached
-                driver.quit()
                 return
 
             try:
@@ -94,5 +84,3 @@ def stepstone_info(job_title, location, e_name, t, count):
             except Exception as e:
                 print(f"Error saving workbook: {e}")
                 continue
-
-    driver.quit()  # Quit the browser
